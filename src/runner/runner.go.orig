@@ -1,0 +1,45 @@
+package main
+
+import (
+	"emailmessage"
+	"fmt"
+	"log"
+
+	"github.com/davecgh/go-spew/spew"
+)
+
+func main() {
+
+	//emailMessage := emailmessage.EmailMessage{message.GenericMessage{Sender: "sender person", Body: "body thing", Recipients: []string{"recpt1", "recpt2"}}}
+	emailMessage, err := emailmessage.New("sender person", "body thing", []string{"recpt1", "recpt2"})
+	checkErr(err)
+
+	sent, err := emailMessage.Send()
+	checkErr(err)
+	_, err = emailMessage.Send()
+	checkErr(err)
+	_, err = emailMessage.Send()
+	checkErr(err)
+
+	if sent {
+		fmt.Println("Message was successfully send")
+	}
+
+	body := emailMessage.Print()
+
+	fmt.Println("PRINTING BODY")
+	fmt.Println(body)
+	fmt.Println("END OF BODY.jpg")
+
+	history, err := emailMessage.GetHistory()
+
+	spew.Dump(history)
+	//spew.Dump(emailMessage)
+	//spew.Dump(err)
+}
+
+func checkErr(err error) {
+	if err != nil {
+		log.Fatal(err)
+	}
+}
